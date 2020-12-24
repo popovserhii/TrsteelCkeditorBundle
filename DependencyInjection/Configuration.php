@@ -17,9 +17,15 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('trsteel_ckeditor');
+        $treeBuilder = new TreeBuilder('trsteel_ckeditor');
 
+        if (method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->getRootNode();
+        } else {
+            // symfony < 4.2 support
+            $rootNode = $treeBuilder->root('trsteel_ckeditor');
+        }
+        
         $rootNode
             ->children()
                 ->scalarNode('class')->defaultValue('Trsteel\CkeditorBundle\Form\Type\CkeditorType')->end()
